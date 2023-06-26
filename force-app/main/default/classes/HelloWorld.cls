@@ -7,6 +7,10 @@
 **/
 public with sharing class HelloWorld {
     public HelloWorld() {
+        print();
+    }
+
+    public static void print(){
         System.debug('Hello World');
     }
 }
