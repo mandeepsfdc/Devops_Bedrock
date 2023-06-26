@@ -7,7 +7,6 @@
 **/
 public with sharing class HelloWorld {
     public HelloWorld() {
-        System.debug('Hello');
-        System.debug('World');
+        System.debug('Hello World');
     }
 }
