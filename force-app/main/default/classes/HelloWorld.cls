@@ -7,10 +7,10 @@
 **/
 public with sharing class HelloWorld {
     public HelloWorld() {
-        print();
+        print('Hello World');
     }
 
-    public static void print(){
-        System.debug('Hello World');
+    public static void print(String s){
+        System.debug(s);
     }
 }
