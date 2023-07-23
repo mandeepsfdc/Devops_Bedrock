@@ -42,7 +42,7 @@ node {
 	        stage('Run Salesforce CLI Command') {
 	            steps {
 	                // Run Salesforce CLI command
-	                sh "./sf-cli.exe auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile ${jwt_key_file} --setdefaultdevhubusername --instanceurl ${SFDC_HOST}""
+	                sh "./sf-cli.exe auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile ${jwt_key_file} --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
 	            }
 	        }
 	    }
