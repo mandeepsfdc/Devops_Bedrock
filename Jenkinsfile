@@ -1,13 +1,11 @@
 pipeline {
     agent any
+
     environment {
         // Define Salesforce CLI URL
         SALESFORCE_CLI_URL = 'https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-x64.exe'
-        HUB_ORG = "${env.HUB_ORG_DH}"
-        SFDC_HOST = "${env.SFDC_HOST_DH}"
-        JWT_KEY_CRED_ID = "${env.JWT_CRED_ID_DH}"
-        CONNECTED_APP_CONSUMER_KEY = "${env.CONNECTED_APP_CONSUMER_KEY_DH}"
     }
+
     stages {
         stage('Install Salesforce CLI') {
             steps {
@@ -20,8 +18,28 @@ pipeline {
         }
         stage('Run Salesforce CLI Command') {
             steps {
-                // Run Salesforce CLI command
-                sh "./sf-cli.exe auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile ${JWT_KEY_CRED_ID} --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
+                // Use the withCredentials block to access the secret text credentials
+                withCredentials([
+                    string(
+                        credentialsId: 'HUB_ORG_DH',
+                        variable: 'HUB_ORG'
+                    ),
+                    string(
+                        credentialsId: 'SFDC_HOST_DH',
+                        variable: 'SFDC_HOST'
+                    ),
+                    string(
+                        credentialsId: 'JWT_CRED_ID_DH',
+                        variable: 'JWT_KEY_CRED_ID'
+                    ),
+                    string(
+                        credentialsId: 'CONNECTED_APP_CONSUMER_KEY_DH',
+                        variable: 'CONNECTED_APP_CONSUMER_KEY'
+                    )
+                ]) {
+                    // Now you can use the environment variables within this block
+                    sh "./sf-cli.exe auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile ${JWT_KEY_CRED_ID} --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
+                }
             }
         }
     }
