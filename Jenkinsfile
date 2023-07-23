@@ -16,7 +16,6 @@ node {
     println HUB_ORG
     println SFDC_HOST
     println CONNECTED_APP_CONSUMER_KEY
-    def toolbelt = tool 'toolbelt'
 
     stage('checkout source') {
         // when running in multi-branch job, one must issue this command
@@ -24,38 +23,30 @@ node {
     }
 
     withCredentials([file(credentialsId: JWT_KEY_CRED_ID, variable: 'jwt_key_file')]) {
-        stage('Deploye Code') {
-            if (isUnix()) {
-                rc = sh returnStatus: true, script: "${toolbelt} auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile ${jwt_key_file} --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
-            }else{
-		    //bat "${toolbelt} plugins:install salesforcedx@49.5.0"
-		    bat "${toolbelt} update"
-		    //bat "${toolbelt} auth:logout -u ${HUB_ORG} -p" 
-                 rc = bat returnStatus: true, script: "${toolbelt} auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile ${jwt_key_file} --loglevel DEBUG --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
-            }
-		
-            if (rc != 0) { 
-		    println 'inside rc 0'
-		    error 'hub org authorization failed' 
+        pipeline {
+	    agent any
+	    environment {
+	        // Define Salesforce CLI URL
+	        SALESFORCE_CLI_URL = 'https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-x64.exe'
 	    }
-		else{
-			println 'rc not 0'
-		}
+	    stages {
+	        stage('Install Salesforce CLI') {
+	            steps {
+	                // Download Salesforce CLI
+	                sh "curl -o sf-cli.exe ${env.SALESFORCE_CLI_URL}"
+	                
+	                // Make the downloaded CLI executable
+	                sh "chmod +x sf-cli.exe"
+	            }
+	        }
+	        stage('Run Salesforce CLI Command') {
+	            steps {
+	                // Run Salesforce CLI command
+	                sh "./sf-cli.exe auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile ${jwt_key_file} --setdefaultdevhubusername --instanceurl ${SFDC_HOST}""
+	            }
+	        }
+	    }
+	}
 
-			println rc
-			
-			// need to pull out assigned username
-			if (isUnix()) {
-				//rmsg = sh returnStdout: true, script: "${toolbelt} force:mdapi:deploy -d manifest/. -u ${HUB_ORG}"
-				rmsg = sh returnStdout: true, script: "${toolbelt} force:source:deploy -x manifest/package.xml -u ${HUB_ORG}"
-			}else{
-				rmsg = bat returnStdout: true, script: "${toolbelt} force:source:deploy -x manifest/package.xml -u ${HUB_ORG}"
-			   //rmsg = bat returnStdout: true, script: "${toolbelt} force:mdapi:deploy -d manifest/. -u ${HUB_ORG}"
-			}
-			  
-            printf rmsg
-            println('Hello from a Job DSL script!')
-            println(rmsg)
-        }
     }
 }
