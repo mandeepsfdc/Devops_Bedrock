@@ -37,8 +37,8 @@ pipeline {
                         variable: 'CONNECTED_APP_CONSUMER_KEY'
                     )
                 ]) {
-                    // Now you can use the environment variables within this block
-                    sh "./sf-cli.exe auth:jwt:grant --clientid ${CONNECTED_APP_CONSUMER_KEY} --username ${HUB_ORG} --jwtkeyfile ${JWT_KEY_CRED_ID} --setdefaultdevhubusername --instanceurl ${SFDC_HOST}"
+                    // Now you can use the environment variables directly within this block
+                    sh "./sf-cli.exe auth:jwt:grant --clientid \$CONNECTED_APP_CONSUMER_KEY --username \$HUB_ORG --jwtkeyfile \$JWT_KEY_CRED_ID --setdefaultdevhubusername --instanceurl \$SFDC_HOST"
                 }
             }
         }
