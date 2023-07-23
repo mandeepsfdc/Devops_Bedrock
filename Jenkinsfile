@@ -3,10 +3,10 @@ pipeline {
     environment {
         // Define Salesforce CLI URL
         SALESFORCE_CLI_URL = 'https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-x64.exe'
-        def HUB_ORG=env.HUB_ORG_DH
-        def SFDC_HOST = env.SFDC_HOST_DH
-        def JWT_KEY_CRED_ID = env.JWT_CRED_ID_DH
-        def CONNECTED_APP_CONSUMER_KEY=env.CONNECTED_APP_CONSUMER_KEY_DH
+        HUB_ORG = "${env.HUB_ORG_DH}"
+        SFDC_HOST = "${env.SFDC_HOST_DH}"
+        JWT_KEY_CRED_ID = "${env.JWT_CRED_ID_DH}"
+        CONNECTED_APP_CONSUMER_KEY = "${env.CONNECTED_APP_CONSUMER_KEY_DH}"
     }
     stages {
         stage('Install Salesforce CLI') {
