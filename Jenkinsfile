@@ -37,9 +37,9 @@ pipeline {
                         credentialsId: 'SFDC_HOST_DH',
                         variable: 'SFDC_HOST'
                     ),
-                    string(
-                        credentialsId: 'JWT_CRED_ID_DH',
-                        variable: 'JWT_KEY_CRED_ID'
+                    file(
+                        credentialsId: 'ae93cc68-5a5c-40fa-bd08-0925a0e60d6e',
+                        variable: 'JWT_KEY_FILE'
                     ),
                     string(
                         credentialsId: 'CONNECTED_APP_CONSUMER_KEY_DH',
@@ -47,7 +47,7 @@ pipeline {
                     )
                 ]) {
                     // Now you can use the environment variables directly within this block
-                    sh "./${env.SALESFORCE_CLI_DIR}/bin/sf auth:jwt:grant --clientid \$CONNECTED_APP_CONSUMER_KEY --username \$HUB_ORG --jwtkeyfile \$JWT_KEY_CRED_ID --setdefaultdevhubusername --instanceurl \$SFDC_HOST"
+                    sh "./${env.SALESFORCE_CLI_DIR}/bin/sf auth:jwt:grant --clientid \$CONNECTED_APP_CONSUMER_KEY --username \$HUB_ORG --jwtkeyfile \$JWT_KEY_FILE --setdefaultdevhubusername --instanceurl \$SFDC_HOST"
                 }
             }
         }
