@@ -21,10 +21,10 @@ pipeline {
                 sh "ls -al"
                 
                 // Rename the sf-cli.exe to sf
-                sh "mv sf-cli.exe sf"
+                sh "mv sf-cli.exe sfcli"
                 
                 // Make the downloaded CLI executable
-                sh "chmod +x sf"
+                sh "chmod +x sfcli"
             }
         }
         stage('Run Salesforce CLI Command') {
@@ -49,7 +49,7 @@ pipeline {
                     )
                 ]) {
                     // Now you can use the environment variables directly within this block
-                    sh "./sf auth:jwt:grant --clientid \$CONNECTED_APP_CONSUMER_KEY --username \$HUB_ORG --jwtkeyfile \$JWT_KEY_CRED_ID --setdefaultdevhubusername --instanceurl \$SFDC_HOST"
+                    sh "./sfcli auth:jwt:grant --clientid \$CONNECTED_APP_CONSUMER_KEY --username \$HUB_ORG --jwtkeyfile \$JWT_KEY_CRED_ID --setdefaultdevhubusername --instanceurl \$SFDC_HOST"
                 }
             }
         }
