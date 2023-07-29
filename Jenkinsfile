@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define Salesforce CLI URL
-        SALESFORCE_CLI_URL = 'https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-darwin-x64.tar.xz'
+        SALESFORCE_CLI_URL = 'https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-darwin-x64.tar.gz'
     }
 
     stages {
