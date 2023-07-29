@@ -20,8 +20,8 @@ pipeline {
                 // List the files in the current directory
                 sh "ls -al"
                 
-                // Rename the sf-cli.exe to sf
-                sh "mv sf-cli.exe sfcli"
+                // Rename the sf-cli to sfcli
+                sh "mv ${env.SALESFORCE_CLI_DIR} sfcli"
                 
                 // Make the downloaded CLI executable
                 sh "chmod +x sfcli"
