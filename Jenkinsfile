@@ -3,17 +3,25 @@ pipeline {
 
     environment {
         // Define Salesforce CLI URL
-        SALESFORCE_CLI_URL = 'https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-darwin-x64.tar.gz'
+        SALESFORCE_CLI_URL = 'https://developer.salesforce.com/media/salesforce-cli/sf/channels/stable/sf-darwin-x64.tar.xz'
+        SALESFORCE_CLI_FILE = 'sf-cli.tar.xz'
+        SALESFORCE_CLI_DIR = 'sf'
     }
 
     stages {
         stage('Install Salesforce CLI') {
             steps {
                 // Download Salesforce CLI
-                sh "curl -o sf-cli.exe ${env.SALESFORCE_CLI_URL}"
+                sh "curl -o ${env.SALESFORCE_CLI_FILE} ${env.SALESFORCE_CLI_URL}"
+                
+                // Extract the downloaded CLI
+                sh "tar -xf ${env.SALESFORCE_CLI_FILE}"
+                
+                // Move the sf binary to the working directory
+                sh "mv ${env.SALESFORCE_CLI_DIR}/sf ./sf"
                 
                 // Make the downloaded CLI executable
-                sh "chmod +x sf-cli.exe"
+                sh "chmod +x sf"
             }
         }
         stage('Run Salesforce CLI Command') {
@@ -38,7 +46,7 @@ pipeline {
                     )
                 ]) {
                     // Now you can use the environment variables directly within this block
-                    sh "./sf-cli.exe auth:jwt:grant --clientid \$CONNECTED_APP_CONSUMER_KEY --username \$HUB_ORG --jwtkeyfile \$JWT_KEY_CRED_ID --setdefaultdevhubusername --instanceurl \$SFDC_HOST"
+                    sh "./sf auth:jwt:grant --clientid \$CONNECTED_APP_CONSUMER_KEY --username \$HUB_ORG --jwtkeyfile \$JWT_KEY_CRED_ID --setdefaultdevhubusername --instanceurl \$SFDC_HOST"
                 }
             }
         }
