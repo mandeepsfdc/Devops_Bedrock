@@ -48,6 +48,7 @@ pipeline {
                 ]) {
                     // Now you can use the environment variables directly within this block
                     sh "./${env.SALESFORCE_CLI_DIR}/bin/sf auth:jwt:grant --clientid \$CONNECTED_APP_CONSUMER_KEY --username \$HUB_ORG --jwtkeyfile \$JWT_KEY_FILE --setdefaultdevhubusername --instanceurl \$SFDC_HOST"
+                    sh "./${env.SALESFORCE_CLI_DIR}/bin/sf force:source:deploy -x manifest/package.xml -u ${HUB_ORG}"
                 }
             }
         }
