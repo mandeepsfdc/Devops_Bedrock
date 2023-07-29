@@ -20,8 +20,8 @@ pipeline {
                 // List the files in the current directory
                 sh "ls -al"
                 
-                // Move the sf binary to the working directory
-                sh "mv ${env.SALESFORCE_CLI_DIR}/sf ./sf"
+                // Rename the sf-cli.exe to sf
+                sh "mv sf-cli.exe sf"
                 
                 // Make the downloaded CLI executable
                 sh "chmod +x sf"
