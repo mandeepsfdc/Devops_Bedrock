@@ -16,6 +16,9 @@ pipeline {
                 
                 // Extract the downloaded CLI
                 sh "tar -xf ${env.SALESFORCE_CLI_FILE}"
+
+                // List the files in the current directory
+                sh "ls -al"
                 
                 // Move the sf binary to the working directory
                 sh "mv ${env.SALESFORCE_CLI_DIR}/sf ./sf"
