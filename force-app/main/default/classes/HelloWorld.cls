@@ -7,7 +7,7 @@
 **/
 public with sharing class HelloWorld {
     public HelloWorld() {
-        print('Hello World DEVOPS DEPLOY NEW');
+        print('Hello World DEVOPS DEPLOY AUTO');
     }
 
     public static void print(String s){
