@@ -7,7 +7,7 @@
 **/
 public with sharing class HelloWorld {
     public HelloWorld() {
-        print('Hello World Feature 1 NEW');
+        print('Hello World Feature 2');
     }
 
     public static void print(String s){
