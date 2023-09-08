@@ -9,6 +9,7 @@ public with sharing class Calculator {
   public Calculator() {
   }
 
+  //add method
   public static Integer add(Integer a, Integer b) {
     return a + b;
   }
