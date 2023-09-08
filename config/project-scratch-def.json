@@ -1,13 +1,22 @@
 {
-  "orgName": "mmann company",
-  "edition": "Developer",
-  "features": ["EnableSetPasswordInApi"],
+  "orgName": "Acme",
+  "edition": "Enterprise",
+  "features": ["ServiceCloud"],
   "settings": {
-    "lightningExperienceSettings": {
-      "enableS1DesktopEnabled": true
-    },
-    "mobileSettings": {
-      "enableS1EncryptedStoragePref2": false
-    }
+      "communitiesSettings": {
+          "enableNetworksEnabled": true
+      },
+      "lightningExperienceSettings": {
+          "enableS1DesktopEnabled": true
+      },
+      "mobileSettings": {
+          "enableS1EncryptedStoragePref2": true
+      },
+      "omniChannelSettings": {
+          "enableOmniChannel": true
+      },
+      "caseSettings": {
+          "systemUserEmail": "mmann@salesforce.com"
+      }
   }
 }
