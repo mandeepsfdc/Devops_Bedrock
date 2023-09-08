@@ -33,7 +33,13 @@ pipeline {
                     def USERNAME_CREDENTIAL = 'HUB_ORG_DH'
                     def CONSUMER_KEY_CREDENTIAL = 'CONNECTED_APP_CONSUMER_KEY_DH'
                     def SECRET_KEY_CREDENTIAL = 'ae93cc68-5a5c-40fa-bd08-0925a0e60d6e'
+
+                    def fullbranch = GIT_BRANCH
+                    def branchName = GIT_BRANCH.split("/").last()
+                    echo "Full BranchName: ${fullbranch}"
+                    echo "Branch Name: ${branchName}"
                     echo "Branch: ${env.BRANCH_NAME}"
+                    
                     //QA-Branch, CI_Branch
                     if (env.BRANCH_NAME == 'team1-feature1') {
                         USERNAME_CREDENTIAL = 'QA_Username'
