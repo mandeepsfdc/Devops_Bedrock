@@ -30,7 +30,7 @@ pipeline {
             steps {
                 script {
                     // Check the branch name
-                    if (env.BRANCH_NAME == 'A') {
+                    if (env.BRANCH_NAME == 'team1-feature1') {
                         // Set QA environment credentials
                         env.CRED_ID_ORG = 'QA_HUB_ORG'
                         env.CRED_ID_HOST = 'QA_SFDC_HOST'
