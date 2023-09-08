@@ -25,24 +25,46 @@ pipeline {
                 sh "chmod +x ${env.SALESFORCE_CLI_DIR}/bin/sf"
             }
         }
+
+        stage('Determine Branch and Set Environment') {
+            steps {
+                script {
+                    // Check the branch name
+                    if (env.BRANCH_NAME == 'A') {
+                        // Set QA environment credentials
+                        env.CRED_ID_ORG = 'QA_HUB_ORG'
+                        env.CRED_ID_HOST = 'QA_SFDC_HOST'
+                        env.CRED_ID_KEY_FILE = 'QA_JWT_KEY_FILE'
+                        env.CRED_ID_CON_APP_KEY = 'QA_CONNECTED_APP_CONSUMER_KEY'
+                    } else if (env.BRANCH_NAME == 'SIT') {
+                        // Set SIT environment credentials
+                        env.CRED_ID_ORG = 'SIT_HUB_ORG'
+                        env.CRED_ID_HOST = 'SIT_SFDC_HOST'
+                        env.CRED_ID_KEY_FILE = 'SIT_JWT_KEY_FILE'
+                        env.CRED_ID_CON_APP_KEY = 'SIT_CONNECTED_APP_CONSUMER_KEY'
+                    }
+                }
+            }
+        }
+
         stage('Run Salesforce CLI Command') {
             steps {
                 // Use the withCredentials block to access the secret text credentials
                 withCredentials([
                     string(
-                        credentialsId: 'HUB_ORG_DH',
+                        credentialsId: env.CRED_ID_ORG,
                         variable: 'HUB_ORG'
                     ),
                     string(
-                        credentialsId: 'SFDC_HOST_DH',
+                        credentialsId: env.CRED_ID_HOST,
                         variable: 'SFDC_HOST'
                     ),
                     file(
-                        credentialsId: 'ae93cc68-5a5c-40fa-bd08-0925a0e60d6e',
+                        credentialsId: env.CRED_ID_KEY_FILE,
                         variable: 'JWT_KEY_FILE'
                     ),
                     string(
-                        credentialsId: 'CONNECTED_APP_CONSUMER_KEY_DH',
+                        credentialsId: env.CRED_ID_CON_APP_KEY,
                         variable: 'CONNECTED_APP_CONSUMER_KEY'
                     )
                 ]) {
