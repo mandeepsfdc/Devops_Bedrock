@@ -11,6 +11,6 @@ public with sharing class HelloWorld {
   }
 
   public static void print2(String s) {
-    System.debug('Team 2 print statement');
+    System.debug('Team 2 print statement - 1');
   }
 }
