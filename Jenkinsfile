@@ -20,35 +20,42 @@ pipeline {
                 // List the files in the current directory
                 sh "ls -al"
 
-                // The Salesforce CLI directory should be 'sf'
                 // Make the sf/bin/sf executable
                 sh "chmod +x ${env.SALESFORCE_CLI_DIR}/bin/sf"
             }
         }
+        
         stage('Run Salesforce CLI Command') {
             steps {
-                // Use the withCredentials block to access the secret text credentials
-                withCredentials([
-                    string(
-                        credentialsId: 'HUB_ORG_DH',
-                        variable: 'HUB_ORG'
-                    ),
-                    string(
-                        credentialsId: 'SFDC_HOST_DH',
-                        variable: 'SFDC_HOST'
-                    ),
-                    file(
-                        credentialsId: 'ae93cc68-5a5c-40fa-bd08-0925a0e60d6e',
-                        variable: 'JWT_KEY_FILE'
-                    ),
-                    string(
-                        credentialsId: 'CONNECTED_APP_CONSUMER_KEY_DH',
-                        variable: 'CONNECTED_APP_CONSUMER_KEY'
-                    )
-                ]) {
-                    // Now you can use the environment variables directly within this block
-                    sh "./${env.SALESFORCE_CLI_DIR}/bin/sf auth:jwt:grant --clientid \$CONNECTED_APP_CONSUMER_KEY --username \$HUB_ORG --jwtkeyfile \$JWT_KEY_FILE --setdefaultdevhubusername --instanceurl \$SFDC_HOST"
-                    sh "./${env.SALESFORCE_CLI_DIR}/bin/sf force:source:deploy -x manifest/package.xml -u ${HUB_ORG}"
+                script {
+                    // Determine credentials based on the branch
+                    // Defalt to these credentials
+                    def USERNAME_CREDENTIAL = 'HUB_ORG_DH'
+                    def CONSUMER_KEY_CREDENTIAL = 'CONNECTED_APP_CONSUMER_KEY_DH'
+                    def SECRET_KEY_CREDENTIAL = 'ae93cc68-5a5c-40fa-bd08-0925a0e60d6e'
+                    
+                    //QA-Branch, CI_Branch
+                    if (env.BRANCH_NAME == 'team1-feature1') {
+                        USERNAME_CREDENTIAL = 'QA_Username'
+                        CONSUMER_KEY_CREDENTIAL = 'QA_Consumer_Key'
+                        SECRET_KEY_CREDENTIAL = 'QA_Secret_Key'
+                        
+                    } else if (env.BRANCH_NAME == 'team2-feature1') {
+                        USERNAME_CREDENTIAL = 'CI_Username'
+                        CONSUMER_KEY_CREDENTIAL = 'CI_Consumer_Key'
+                        SECRET_KEY_CREDENTIAL = 'CI_Secret_Key'
+                    }
+                    
+                    withCredentials([
+                        string(credentialsId: USERNAME_CREDENTIAL, variable: 'USERNAME'),
+                        string(credentialsId: 'SFDC_HOST_DH', variable: 'LOGIN_URL'),
+                        file(credentialsId: SECRET_KEY_CREDENTIAL, variable: 'SECRET_KEY'),
+                        string(credentialsId: CONSUMER_KEY_CREDENTIAL, variable: 'CONNECTED_APP_CONSUMER_KEY')
+                    ]) {
+                        // Now you can use the environment variables directly within this block
+                        sh "./${env.SALESFORCE_CLI_DIR}/bin/sf auth:jwt:grant --clientid \$CONNECTED_APP_CONSUMER_KEY --username \$USERNAME --jwtkeyfile \$SECRET_KEY --setdefaultdevhubusername --instanceurl \$LOGIN_URL"
+                        sh "./${env.SALESFORCE_CLI_DIR}/bin/sf force:source:deploy -x manifest/package.xml -u ${USERNAME}"
+                    }
                 }
             }
         }
