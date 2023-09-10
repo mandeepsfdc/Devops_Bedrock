@@ -40,13 +40,12 @@ pipeline {
                     echo "Branch Name: ${branchName}"
                     echo "Branch: ${env.BRANCH_NAME}"
                     
-                    //QA-Branch, CI_Branch
-                    if (env.BRANCH_NAME == 'team1-feature1') {
+                    if (env.BRANCH_NAME == 'QA-Branch') {
                         USERNAME_CREDENTIAL = 'QA_Username'
                         CONSUMER_KEY_CREDENTIAL = 'QA_Consumer_Key'
                         SECRET_KEY_CREDENTIAL = 'QA_Secret_Key'
                         
-                    } else if (env.BRANCH_NAME == 'team2-feature1') {
+                    } else if (env.BRANCH_NAME == 'CI_Branch') {
                         USERNAME_CREDENTIAL = 'CI_Username'
                         CONSUMER_KEY_CREDENTIAL = 'CI_Consumer_Key'
                         SECRET_KEY_CREDENTIAL = 'CI_Secret_Key'
