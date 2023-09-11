@@ -9,6 +9,36 @@ pipeline {
     }
 
     stages {
+
+       stage('Detect PR') {
+            steps {
+                script {
+                    isPullRequest = sh(script: "git log -1 --pretty=%B | grep 'Merge pull request' || true", returnStdout: true).trim()
+                }
+            }
+        }
+
+        stage('Fetch PMD Binary and Run Checks') {
+            when {
+                expression {
+                    return isPullRequest != ''
+                }
+            }
+            steps {
+                // Download PMD binary
+                sh 'wget -O pmd.zip https://github.com/pmd/pmd/releases/download/pmd_releases%2F7.0.0-rc3/pmd-dist-7.0.0-rc3-bin.zip'
+                sh 'unzip pmd.zip'
+                
+                // Run PMD on Salesforce Source with your ruleset
+                sh '''
+                    ./pmd-dist-7.0.0-rc3/bin/run.sh pmd -d src/ -R apex-basic.xml -f text > pmd-output.txt
+                    cat pmd-output.txt
+                    grep "<violation" pmd-output.txt && exit 1 || exit 0
+                '''
+            }
+        }
+
+
         stage('Install Salesforce CLI') {
             steps {
                 // Download Salesforce CLI
