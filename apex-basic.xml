@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<ruleset name="Apex Basic Ruleset"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+    <description>Ruleset with basic checks for Apex in Salesforce.</description>
+
+    <!-- Avoid SOQL/SOSL statements inside loops -->
+    <rule ref="category/apex/performance.xml/AvoidSoqlInLoops" />
+
+    <!-- Avoid DML statements inside loops -->
+    <rule ref="category/apex/performance.xml/AvoidDmlStatementsInLoops" />
+
+    <!-- Enforce a limit on the number of fields in SOQL queries. This can be adjusted as per need. -->
+    <rule ref="category/apex/performance.xml/ExcessiveParameterList">
+        <properties>
+            <property name="minimum" value="5" />
+        </properties>
+    </rule>
+
+    <!-- Check if class or trigger is declared with sharing or without sharing -->
+    <rule ref="category/apex/security.xml/ClassWithSharingDoesNotInherit" />
+
+    <!-- Avoid System.debug statements in the code -->
+    <rule ref="category/apex/bestpractices.xml/AvoidGlobalModifier" />
+
+    <!-- Avoid methods with a high cyclomatic complexity -->
+    <rule ref="category/apex/design.xml/ExcessiveClassLength">
+        <properties>
+            <property name="minimum" value="200" /> <!-- Adjust as per your requirements -->
+        </properties>
+    </rule>
+
+    <!-- Other rules you might consider adding include checks for:
+    - Test classes not having any tests.
+    - Classes or triggers having no comments at the top describing their purpose.
+    - ... and so on.
+    -->
+
+</ruleset>
